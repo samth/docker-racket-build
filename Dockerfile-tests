@@ -14,8 +14,58 @@ RUN sh ./racket-$version-x86_64-linux.sh --in-place --dest ./racket-in-place
 
 RUN ./racket-in-place/bin/raco pkg install --auto racket-test htdp-test typed-racket-test
 
-# mflatt
-RUN ./racket-in-place/bin/racket -l tests/racket/test
-RUN ./racket-in-place/bin/racket -l tests/htdp-lang/test-htdp
-RUN ./racket-in-place/bin/racket -l tests/compiler/embed/test
-RUN ./racket-in-place/bin/racket -f racket-test-core/tests/racket/pack.rktl
+# robby
+RUN ./racket-in-place/bin/racket -l tests/racket/contract/all
+RUN ./racket-in-place/bin/racket -l tests/racket/contract-stress-argmin
+RUN ./racket-in-place/bin/racket -l tests/racket/contract-stress-take-right
+
+# samth
+RUN apt-get install -y glib-2.0
+RUN apt-get install -y xvfb
+RUN ./racket-in-place/bin/raco test -l tests/match/main
+RUN xvfb-run ./racket-in-place/bin/racket -l typed-racket-test -- --all
+
+# ryanc
+RUN ./racket-in-place/bin/raco pkg install data-test db-test srfi-test
+RUN ./racket-in-place/bin/raco test -c tests/stxparse
+RUN ./racket-in-place/bin/raco test -c tests/data
+RUN ./racket-in-place/bin/racket -l tests/db/all-tests
+RUN ./racket-in-place/bin/racket -l tests/srfi/run-tests
+
+
+# sstrickl
+RUN ./racket-in-place/bin/raco test -l tests/units/test-unit-contracts
+RUN ./racket-in-place/bin/racket -l tests/racket/contract/define-contract
+RUN ./racket-in-place/bin/racket -l tests/racket/contract/with-contract
+RUN ./racket-in-place/bin/racket -l tests/racket/contract/class
+
+# stchang
+RUN ./racket-in-place/bin/raco test -l lazy/tests/main.rkt
+
+# dvanhorn
+RUN ./racket-in-place/bin/raco test -c eopl/tests
+
+
+# stchang # currently fails
+#RUN ./racket-in-place/bin/raco test -l tests/stepper/automatic-tests.rkt
+
+# jay
+
+RUN ./racket-in-place/bin/raco test -c datalog/tests
+RUN ./racket-in-place/bin/raco test -c racklog/tests
+RUN xvfb-run ./racket-in-place/bin/raco test -c plai
+RUN ./racket-in-place/bin/raco pkg install html-test 
+RUN ./racket-in-place/bin/raco test -c tests/html
+RUN xvfb-run ./racket-in-place/bin/raco test -c tests/xml
+
+# ryanc
+RUN xvfb-run ./racket-in-place/bin/racket -l tests/macro-debugger/all-tests.rkt -- --gui
+
+# robby
+RUN ./racket-in-place/bin/racket -l 2htdp/tests/bitmap-as-image-in-universe
+RUN ./racket-in-place/bin/racket -l 2htdp/tests/image-equality-performance-htdp
+RUN ./racket-in-place/bin/racket -l 2htdp/tests/image-equality-performance
+RUN ./racket-in-place/bin/racket -l 2htdp/tests/image-too-large
+RUN ./racket-in-place/bin/racket -l 2htdp/tests/test-image
+RUN ./racket-in-place/bin/raco pkg install redex-test
+RUN ./racket-in-place/bin/racket -l redex/tests/run-tests
