@@ -1,0 +1,21 @@
+FROM ubuntu:17.10
+ARG version="6.10.1.900"
+
+# Setup
+
+RUN apt-get update
+RUN apt-get install -y wget
+
+# Test the regular installer
+
+RUN wget http://pre-release.racket-lang.org/installers/racket-$version-x86_64-linux.sh
+
+RUN sh ./racket-$version-x86_64-linux.sh --in-place --dest ./racket-in-place
+
+RUN ./racket-in-place/bin/raco pkg install --auto racket-test htdp-test typed-racket-test
+
+# mflatt
+RUN ./racket-in-place/bin/racket -l tests/racket/test
+RUN ./racket-in-place/bin/racket -l tests/htdp-lang/test-htdp
+RUN ./racket-in-place/bin/racket -l tests/compiler/embed/test
+RUN ./racket-in-place/bin/racket -f racket-test-core/tests/racket/pack.rktl
