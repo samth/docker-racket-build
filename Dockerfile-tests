@@ -46,7 +46,7 @@ RUN ./racket-in-place/bin/raco test -l lazy/tests/main.rkt
 RUN ./racket-in-place/bin/raco test -c eopl/tests
 
 
-# stchang # currently fails
+# stchang # currently fails because of check-random, fix is on master
 #RUN ./racket-in-place/bin/raco test -l tests/stepper/automatic-tests.rkt
 
 # jay
@@ -59,13 +59,44 @@ RUN ./racket-in-place/bin/raco test -c tests/html
 RUN xvfb-run ./racket-in-place/bin/raco test -c tests/xml
 
 # ryanc
-RUN xvfb-run ./racket-in-place/bin/racket -l tests/macro-debugger/all-tests.rkt -- --gui
+# fails due to the same failures seen on drdr
+#RUN ./racket-in-place/bin/raco test -l tests/macro-debugger/all-tests.rkt
+
+# mflatt
+RUN apt-get install -y gcc
+RUN ./racket-in-place/bin/raco pkg install compiler-test
+# fails with something about -fPIC
+#RUN ./racket-in-place/bin/racket -l tests/racket/embed-in-c
+# fails with missing collection that does seem to be there
+#RUN ./racket-in-place/bin/racket -l tests/compiler/embed/test
 
 # robby
-RUN ./racket-in-place/bin/racket -l 2htdp/tests/bitmap-as-image-in-universe
-RUN ./racket-in-place/bin/racket -l 2htdp/tests/image-equality-performance-htdp
-RUN ./racket-in-place/bin/racket -l 2htdp/tests/image-equality-performance
-RUN ./racket-in-place/bin/racket -l 2htdp/tests/image-too-large
-RUN ./racket-in-place/bin/racket -l 2htdp/tests/test-image
+RUN xvfb-run ./racket-in-place/bin/racket -l 2htdp/tests/bitmap-as-image-in-universe
+RUN xvfb-run ./racket-in-place/bin/racket -l 2htdp/tests/image-equality-performance-htdp
+RUN xvfb-run ./racket-in-place/bin/racket -l 2htdp/tests/image-equality-performance
+RUN xvfb-run ./racket-in-place/bin/racket -l 2htdp/tests/image-too-large
+RUN xvfb-run ./racket-in-place/bin/racket -l 2htdp/tests/test-image
 RUN ./racket-in-place/bin/raco pkg install redex-test
-RUN ./racket-in-place/bin/racket -l redex/tests/run-tests
+# fails due to font & rendering differences
+#RUN xvfb-run ./racket-in-place/bin/racket -l redex/tests/run-tests
+
+RUN ./racket-in-place/bin/raco pkg install planet-test
+RUN ./racket-in-place/bin/raco test -l tests/planet/run-all
+
+# mflatt
+RUN ./racket-in-place/bin/raco pkg install --auto distro-build
+RUN ./racket-in-place/bin/raco pkg install --auto --name distro-build-test https://github.com/racket/distro-build.git?path=distro-build-test
+# fails with an error about #f being passed to `system*`
+# RUN ./racket-in-place/bin/racket -l distro-build/tests/unix-installer
+
+RUN ./racket-in-place/bin/raco pkg install --auto raco-find-collection
+# FIXME install everything in installation scope
+RUN ./racket-in-place/bin/racket -f root/.racket/$version/pkgs/racket-test-core/tests/racket/pack.rktl
+# fails with a strange error about files not found, i suspect weird current-dir
+#RUN ./racket-in-place/bin/racket -l tests/htdp-lang/test-htdp
+RUN ./racket-in-place/bin/raco pkg install -i --auto gui-test
+RUN mkdir test-dir
+WORKDIR test-dir
+RUN xvfb-run ../racket-in-place/bin/racket -l tests/gracket/test
+RUN xvfb-run ../racket-in-place/bin/gracket -z -e 1
+RUN xvfb-run ../racket-in-place/bin/gracket -e 1
