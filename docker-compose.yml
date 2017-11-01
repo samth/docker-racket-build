@@ -6,7 +6,7 @@ version: "3.3"
 
 services:
 
-  # TODO: This coinfiguration is highly repetitive and should be made more
+  # TODO: This configuration is highly repetitive and should be made more
   # abstract. This is likely best achieved with a "test runner container" that
   # bind mounts the docker socket and calls the docker REST API from a script
   # to programmatically build and test each combination of installater options.
