@@ -1,0 +1,28 @@
+ARG RACKET_IMAGE
+
+FROM ${RACKET_IMAGE}
+
+RUN raco pkg install --auto --installation \
+    compiler-test \
+    data-test \
+    datalog \
+    db-test \
+    distro-build \
+    distro-build-test \
+    eopl \
+    gui-test \
+    htdp-test \
+    html-test \
+    lazy \
+    planet-test \
+    racket-test \
+    raco-find-collection \
+    racket-test-core \
+    racklog \
+    redex-test \
+    srfi-test \
+    typed-racket-test
+
+COPY ./test.sh /usr/bin/racket-tests.sh
+RUN chmod +x /usr/bin/racket-tests.sh
+CMD ["/bin/sh", "-c", "/usr/bin/racket-tests.sh"]
