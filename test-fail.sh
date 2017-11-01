@@ -20,4 +20,3 @@ racket -l distro-build/tests/unix-installer
 # fails with claim that the /beginner.rktl file is missing; likely caused by
 # assumptions about the current directory (docker container uses root directory
 # by default)
-racket -l tests/htdp-lang/test-htdp

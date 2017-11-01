@@ -12,6 +12,9 @@ racket -l tests/racket/contract/all
 racket -l tests/racket/contract-stress-argmin
 racket -l tests/racket/contract-stress-take-right
 
+# matthias
+raco test -l tests/htdp-lang/test-htdp
+
 # samth
 raco test -l tests/match/main
 
@@ -44,7 +47,5 @@ raco test -c tests/html
 
 # mflatt
 # WARNING: pack.rktl writes to collects dirs, so it's probably best to run this
-# one last to avoid test environment issues. The complex subshell expression is
-# a dirty hack that ought to be replaced by a simple Racket script which
-# computes the right path and calls (load). But I'm too tired right now.
-racket -f "$(racket -e "(require setup/dirs) (display (path->string (find-pkgs-dir)))")/racket-test-core/tests/racket/pack.rktl"
+# one last to avoid test environment issues. 
+racket -l tests/racket/test-pack
