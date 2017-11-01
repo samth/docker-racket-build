@@ -1,0 +1,141 @@
+version: "3.3"
+
+# To build and test everything from scratch: "docker-compose up --build"
+# But this runs all tests --- including the memory-hungry db tests --- in
+# parallel, causing OOMEs and subsequent container death on typical laptops.
+
+services:
+
+  # TODO: This coinfiguration is highly repetitive and should be made more
+  # abstract. This is likely best achieved with a "test runner container" that
+  # bind mounts the docker socket and calls the docker REST API from a script
+  # to programmatically build and test each combination of installater options.
+  # Doing this in Python would be relatively easy, since there's already an
+  # official and supported docker client python library.
+
+  # TODO: GUI tests aren't set up at all here. Should probably be done with a
+  # shared xvfb container and overriding the DISPLAY env var, as opposed to
+  # xvfb-run scripting (which is likely less cooperative with docker's
+  # assumptions about process management in containers).
+
+  # TODO: From-source builds aren't included yet, but they're not difficult to
+  # add. Neither are minimal-with-prebuilt-pkgs installations, unix-style
+  # installations, or tests for installation uninstall scripts. Doing this
+  # after making the test runner container would be sensible.
+
+  # TODO: Both installer downloads and package downloads could conceivably be
+  # cached. Should wait until after test runner container is implemented.
+
+  racket-x86:
+    image: racket-x86
+    build:
+      context: .
+      dockerfile: Dockerfile.installer
+      args:
+        # TODO: Make the version more easily configurable, likely as part of
+        # the test runner container.
+        RACKET_VERSION: 6.10.1.900
+        RACKET_INSTALLER_PLATFORM: x86_64-linux
+        RACKET_INSTALLER_DIST: racket
+    command: racket -e '(+ 1 2)'
+  racket-x86-test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+      args:
+        RACKET_IMAGE: racket-x86
+
+  racket-x86-minimal:
+    image: racket-x86-minimal
+    build:
+      context: .
+      dockerfile: Dockerfile.installer
+      args:
+        RACKET_VERSION: 6.10.1.900
+        RACKET_INSTALLER_PLATFORM: x86_64-linux
+        RACKET_INSTALLER_DIST: racket-minimal
+    command: racket -e '(+ 1 2)'
+  racket-x86-minimal-test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+      args:
+        RACKET_IMAGE: racket-x86-minimal
+
+  racket-i386:
+    image: racket-i386
+    build:
+      context: .
+      dockerfile: Dockerfile.installer
+      args:
+        # Base images changed to i386 variants, as using the default images
+        # won't compile due to architecture assumptions.
+        RACKET_IMAGE_FOR_INSTALLER: i386/buildpack-deps
+        RACKET_IMAGE_FOR_RUNTIME: i386/buildpack-deps
+        RACKET_VERSION: 6.10.1.900
+        RACKET_INSTALLER_PLATFORM: i386-linux
+        RACKET_INSTALLER_DIST: racket
+    command: racket -e '(+ 1 2)'
+  racket-i386-test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+      args:
+        RACKET_IMAGE: racket-i386
+
+  racket-i386-minimal:
+    image: racket-i386-minimal
+    build:
+      context: .
+      dockerfile: Dockerfile.installer
+      args:
+        RACKET_IMAGE_FOR_INSTALLER: i386/buildpack-deps
+        RACKET_IMAGE_FOR_RUNTIME: i386/buildpack-deps
+        RACKET_VERSION: 6.10.1.900
+        RACKET_INSTALLER_PLATFORM: i386-linux
+        RACKET_INSTALLER_DIST: racket-minimal
+    command: racket -e '(+ 1 2)'
+  racket-i386-minimal-test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+      args:
+        RACKET_IMAGE: racket-i386-minimal
+
+  # TODO: Figure out why natipkg builds are failing. Seems to be related to
+  # problems with the libssl and libcrypto (OpenSSL libs) libs included in the
+  # racket-x86_64-linux-natipkg-2 package.
+
+  # racket-x86-natipkg:
+  #   image: racket-x86-natipkg
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.installer
+  #     args:
+  #       RACKET_VERSION: 6.10.1.900
+  #       RACKET_INSTALLER_PLATFORM: x86_64-linux-natipkg
+  #       RACKET_INSTALLER_DIST: racket
+  #   command: racket -e '(+ 1 2)'
+  # racket-x86-natipkg-test:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.test
+  #     args:
+  #       RACKET_IMAGE: racket-x86-natipkg
+
+  # racket-x86-natipkg-minimal:
+  #   image: racket-x86-natipkg-minimal
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.installer
+  #     args:
+  #       RACKET_VERSION: 6.10.1.900
+  #       RACKET_INSTALLER_PLATFORM: x86_64-linux-natipkg
+  #       RACKET_INSTALLER_DIST: racket-minimal
+  #   command: racket -e '(+ 1 2)'
+  # racket-x86-natipkg-minimal-test:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.test
+  #     args:
+  #       RACKET_IMAGE: racket-x86-natipkg-minimal
