@@ -1,0 +1,20 @@
+ARG RACKET_IMAGE
+
+FROM ${RACKET_IMAGE}
+
+RUN raco pkg install --auto --installation --skip-installed \
+    distro-build \
+    distro-build-test \
+    main-distribution \
+    main-distribution-test \
+    raco-find-collection \
+    https://github.com/racket/pcps-test.git
+RUN apt-get update
+RUN apt-get install -y xvfb
+RUN apt-get install -y libgtk2.0-0
+
+COPY ./test.sh /usr/bin/racket-tests.sh
+RUN chmod +x /usr/bin/racket-tests.sh
+COPY ./test-gui.sh /usr/bin/racket-gui-tests.sh
+RUN chmod +x /usr/bin/racket-gui-tests.sh
+CMD ["/bin/sh", "-c", "/usr/bin/racket-tests.sh" -c "/usr/bin/racket-gui-tests.sh"]
