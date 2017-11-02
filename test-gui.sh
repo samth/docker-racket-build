@@ -12,7 +12,7 @@ set -eufx
 xvfb-run racket -l typed-racket-test -- --all
 
 # jay
-raco test -c tests/xml # unsure why this requires foreign GUI libs
+xvfb-run raco test -c tests/xml # needs gui libs for XML snips
 xvfb-run raco test -c plai
 
 # robby
@@ -21,6 +21,9 @@ xvfb-run racket -l 2htdp/tests/image-equality-performance-htdp
 xvfb-run racket -l 2htdp/tests/image-equality-performance
 xvfb-run racket -l 2htdp/tests/image-too-large
 xvfb-run racket -l 2htdp/tests/test-image
+
+xvfb-run raco test -c framework/tests
+
 # fails due to font & rendering differences
 xvfb-run racket -l redex/tests/run-tests
 
@@ -32,3 +35,11 @@ cd test-dir
 xvfb-run racket -l tests/gracket/test
 xvfb-run gracket -z -e 1
 xvfb-run gracket -e 1
+
+cd `raco fc pcps-test`
+for i in *.rkt; do racket -t $i; done
+for i in *.ss; do racket -t $i; done
+
+cd `raco fc tests/drracket/io`
+chmod +x run.sh
+bash ./run.sh
