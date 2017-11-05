@@ -41,6 +41,38 @@ services:
       DISPLAY: xvfb:0.0
     depends_on:
       - xvfb
+  websockify:
+    # TODO: This image was chosen via a lazy google search and may break at any
+    # time without warning.
+    image: efrecon/websockify
+    command: 50000 x11vnc:5900
+    ports:
+      - "50000:50000"
+    depends_on:
+      - x11vnc
+  novnc:
+    build:
+      context: .
+      dockerfile: Dockerfile.novnc
+    volumes:
+      - nginx-html:/usr/share/novnc
+  nginx:
+    image: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./novnc-proxy.conf:/etc/nginx/conf.d/default.conf:ro
+      # The nocopy option is needed to ensure that novnc's preexisting files
+      # are copied into the nginx-html volume, then copied from the nginx-html
+      # volume into the nginx contaier itself. Without nocopy, nginx's files in
+      # the /usr/share/nginx/html directory could get copied into the volume
+      # instead of the other way around. Technically the read-only option and
+      # the dependency on novnc (ensuring novnc uses the volume first) should
+      # prevent that from happening, but that's a little too magic to rely on.
+      - nginx-html:/usr/share/nginx/html:ro,nocopy
+    depends_on:
+      - novnc
+      - websockify
 
   racket-x86:
     image: racket-x86
@@ -199,3 +231,6 @@ services:
   #     dockerfile: Dockerfile.test
   #     args:
   #       RACKET_IMAGE: racket-x86-natipkg-minimal
+
+volumes:
+  nginx-html:

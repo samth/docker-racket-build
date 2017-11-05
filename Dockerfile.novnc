@@ -1,0 +1,8 @@
+FROM buildpack-deps:jessie-curl as downloader
+
+RUN mkdir -p /usr/share/novnc
+RUN wget --quiet -O- "https://github.com/novnc/noVNC/tarball/master" | tar -xvzf - --strip-components=1 -C /usr/share/novnc
+
+FROM alpine
+COPY --from=downloader /usr/share/novnc /usr/share/novnc
+CMD ["/bin/true"]
