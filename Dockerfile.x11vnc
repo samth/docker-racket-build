@@ -1,0 +1,8 @@
+FROM alpine:edge
+RUN apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ x11vnc
+
+# Default port is 5900 plus display number, but docker expects static port
+# numbers so we always use 5900 regardless of what display we're talking to
+EXPOSE 5900
+ENTRYPOINT ["/usr/bin/x11vnc"]
+CMD ["-rfbport", "5900", "-shared", "-viewonly", "-forever", "-nopw"]
