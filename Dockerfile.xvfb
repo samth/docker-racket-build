@@ -1,0 +1,8 @@
+FROM alpine
+RUN apk add --no-cache xvfb
+
+# X server TCP port number is 6000 plus display number, which CMD sets to zero
+EXPOSE 6000
+
+ENTRYPOINT ["/usr/bin/Xvfb"]
+CMD [":0", "-ac", "-listen", "tcp", "-noreset"]
