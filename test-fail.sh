@@ -17,3 +17,27 @@ racket -l tests/racket/embed-in-c
 racket -l tests/compiler/embed/test
 # fails with an error about #f being passed to `system*`
 racket -l distro-build/tests/unix-installer
+
+# GUI FAILURES
+
+# Fails due to font & rendering differences
+racket -l redex/tests/run-tests
+
+# mflatt
+# Fails due to suspected directory problems. Investigate why this needs
+# its own directory, possibly use explicit /tmpdir or edit test to avoid
+# directory dependency entirely.
+mkdir test-dir
+cd test-dir
+racket -l tests/gracket/test
+gracket -z -e 1
+gracket -e 1
+
+# TODO: Memory leak tests (in the tests/drracket/io/leak-on-run module)
+# causes script to hang, possibly because of Docker killing the module
+# execution process without the script properly catching the failure signal.
+# The run.sh script seems to only run modules and ought to be replaced by a
+# proper invocation of `raco test`.
+cd `raco fc tests/drracket/io`
+chmod +x run.sh
+bash ./run.sh
