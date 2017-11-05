@@ -30,6 +30,17 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.xvfb
+    # x11vnc requires a shared IPC namespace with the X server it proxies
+    ipc: host
+  x11vnc:
+    build:
+      context: .
+      dockerfile: Dockerfile.x11vnc
+    ipc: host
+    environment:
+      DISPLAY: xvfb:0.0
+    depends_on:
+      - xvfb
 
   racket-x86:
     image: racket-x86
