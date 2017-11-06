@@ -21,7 +21,9 @@ docker-compose run racket-x86-minimal-test
 
 ##### Run the gui tests
 
-TODO
+```
+docker-compose run racket-x86-minimal-test-gui
+```
 
 
 ##### Run a particular command in a generated image
