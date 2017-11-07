@@ -77,7 +77,7 @@ services:
       args:
         # TODO: Make the version more easily configurable, likely as part of
         # the test runner container.
-        RACKET_VERSION: 6.10.1.900
+        RACKET_VERSION: "6.11"
         RACKET_INSTALLER_PLATFORM: x86_64-linux
         RACKET_INSTALLER_DIST: racket
     command: racket -e '(+ 1 2)'
@@ -105,7 +105,7 @@ services:
       context: .
       dockerfile: Dockerfile.installer
       args:
-        RACKET_VERSION: 6.10.1.900
+        RACKET_VERSION: "6.11"
         RACKET_INSTALLER_PLATFORM: x86_64-linux
         RACKET_INSTALLER_DIST: racket-minimal
     command: racket -e '(+ 1 2)'
@@ -137,7 +137,7 @@ services:
         # won't compile due to architecture assumptions.
         RACKET_IMAGE_FOR_INSTALLER: i386/buildpack-deps
         RACKET_IMAGE_FOR_RUNTIME: i386/buildpack-deps
-        RACKET_VERSION: 6.10.1.900
+        RACKET_VERSION: "6.11"
         RACKET_INSTALLER_PLATFORM: i386-linux
         RACKET_INSTALLER_DIST: racket
     command: racket -e '(+ 1 2)'
@@ -167,7 +167,7 @@ services:
       args:
         RACKET_IMAGE_FOR_INSTALLER: i386/buildpack-deps
         RACKET_IMAGE_FOR_RUNTIME: i386/buildpack-deps
-        RACKET_VERSION: 6.10.1.900
+        RACKET_VERSION: "6.11"
         RACKET_INSTALLER_PLATFORM: i386-linux
         RACKET_INSTALLER_DIST: racket-minimal
     command: racket -e '(+ 1 2)'
@@ -199,7 +199,7 @@ services:
   #     context: .
   #     dockerfile: Dockerfile.installer
   #     args:
-  #       RACKET_VERSION: 6.10.1.900
+  #       RACKET_VERSION: "6.11"
   #       RACKET_INSTALLER_PLATFORM: x86_64-linux-natipkg
   #       RACKET_INSTALLER_DIST: racket
   #   command: racket -e '(+ 1 2)'
@@ -216,7 +216,7 @@ services:
   #     context: .
   #     dockerfile: Dockerfile.installer
   #     args:
-  #       RACKET_VERSION: 6.10.1.900
+  #       RACKET_VERSION: "6.11"
   #       RACKET_INSTALLER_PLATFORM: x86_64-linux-natipkg
   #       RACKET_INSTALLER_DIST: racket-minimal
   #   command: racket -e '(+ 1 2)'
