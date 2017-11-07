@@ -13,11 +13,6 @@ services:
   # Doing this in Python would be relatively easy, since there's already an
   # official and supported docker client python library.
 
-  # TODO: GUI tests aren't set up at all here. Should probably be done with a
-  # shared xvfb container and overriding the DISPLAY env var, as opposed to
-  # xvfb-run scripting (which is likely less cooperative with docker's
-  # assumptions about process management in containers).
-
   # TODO: From-source builds aren't included yet, but they're not difficult to
   # add. Neither are minimal-with-prebuilt-pkgs installations, unix-style
   # installations, or tests for installation uninstall scripts. Doing this
