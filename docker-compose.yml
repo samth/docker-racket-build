@@ -193,39 +193,61 @@ services:
   # problems with the libssl and libcrypto (OpenSSL libs) libs included in the
   # racket-x86_64-linux-natipkg-2 package.
 
-  # racket-x86-natipkg:
-  #   image: racket-x86-natipkg
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile.installer
-  #     args:
-  #       RACKET_VERSION: "6.11"
-  #       RACKET_INSTALLER_PLATFORM: x86_64-linux-natipkg
-  #       RACKET_INSTALLER_DIST: racket
-  #   command: racket -e '(+ 1 2)'
-  # racket-x86-natipkg-test:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile.test
-  #     args:
-  #       RACKET_IMAGE: racket-x86-natipkg
+  racket-x86-natipkg:
+    image: racket-x86-natipkg
+    build:
+      context: .
+      dockerfile: Dockerfile.installer
+      args:
+        RACKET_VERSION: "6.11"
+        RACKET_INSTALLER_PLATFORM: x86_64-linux-natipkg
+        RACKET_INSTALLER_DIST: racket
+    command: racket -e '(+ 1 2)'
+  racket-x86-natipkg-test:
+    image: racket-x86-natipkg-test
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+      args:
+        RACKET_IMAGE: racket-x86-natipkg
+  racket-x86-natipkg-test-gui:
+    build:
+      context: .
+      dockerfile: Dockerfile.test-gui
+      args:
+        RACKET_TEST_IMAGE: racket-x86-natipkg-test
+    environment:
+      DISPLAY: xvfb:0.0
+    depends_on:
+      - xvfb
 
-  # racket-x86-natipkg-minimal:
-  #   image: racket-x86-natipkg-minimal
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile.installer
-  #     args:
-  #       RACKET_VERSION: "6.11"
-  #       RACKET_INSTALLER_PLATFORM: x86_64-linux-natipkg
-  #       RACKET_INSTALLER_DIST: racket-minimal
-  #   command: racket -e '(+ 1 2)'
-  # racket-x86-natipkg-minimal-test:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile.test
-  #     args:
-  #       RACKET_IMAGE: racket-x86-natipkg-minimal
+  racket-x86-natipkg-minimal:
+    image: racket-x86-natipkg-minimal
+    build:
+      context: .
+      dockerfile: Dockerfile.installer
+      args:
+        RACKET_VERSION: "6.11"
+        RACKET_INSTALLER_PLATFORM: x86_64-linux-natipkg
+        RACKET_INSTALLER_DIST: racket-minimal
+    command: racket -e '(+ 1 2)'
+  racket-x86-natipkg-minimal-test:
+    image: racket-x86-natipkg-minimal-test
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+      args:
+        RACKET_IMAGE: racket-x86-natipkg-minimal
+  racket-x86-natipkg-minimal-test-gui:
+    build:
+      context: .
+      dockerfile: Dockerfile.test-gui
+      args:
+        RACKET_TEST_IMAGE: racket-x86-natipkg-minimal-test
+    environment:
+      DISPLAY: xvfb:0.0
+    depends_on:
+      - xvfb
 
 volumes:
   nginx-html:
