@@ -28,5 +28,7 @@ RUN sh /tmp/racket-installer --in-place --create-dir --dest /usr/racket
 FROM ${RACKET_IMAGE_FOR_RUNTIME}
 COPY --from=installer /usr/racket /usr/racket
 ENV PATH="/usr/racket/bin:${PATH}"
+ENV SSL_CERT_FILE="/usr/lib/ssl/cert.pem"
+ENV SSL_CERT_DIR="/usr/lib/ssl/certs"
 RUN raco setup
 CMD ["racket"]
