@@ -1,8 +1,6 @@
 # Like the `test.sh` script, but for GUI tests. These tests require a running X
 # server (run with xvfb for a fake X backend) and several GUI-related foreign
-# libraries. Test commands that are prefixed with "xvfb-run" should instead
-# rely on a single shared X server, since it's easier and more intuitive to run
-# one in its own Docker container that's shared for all tests.
+# libraries.
 set -eufx
 
 # samth
