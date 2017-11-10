@@ -1,0 +1,18 @@
+sudo: required
+
+env:
+  - INSTALLATION=racket-x86
+  - INSTALLATION=racket-x86-minimal
+  - INSTALLATION=racket-i386
+  - INSTALLATION=racket-i386-minimal
+  - INSTALLATION=racket-x86-natipkg
+  - INSTALLATION=racket-x86-natipkg-minimal
+
+services:
+  - docker
+
+script:
+  - docker-compose run ${INSTALLATION}
+  # Commented out for now - will enable in future PR once first part works
+  # - docker-compose run ${INSTALLATION}-test
+  # - docker-compose run ${INSTALLATION}-test-gui
