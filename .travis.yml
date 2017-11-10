@@ -21,4 +21,4 @@ before_install:
 script:
   - docker-compose run ${INSTALLATION}
   - docker-compose run ${INSTALLATION}-test
-  # - docker-compose run ${INSTALLATION}-test-gui
+  - docker-compose run ${INSTALLATION}-test-gui
