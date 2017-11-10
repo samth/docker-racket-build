@@ -1,4 +1,4 @@
-version: "3.3"
+version: "3.2"
 
 # To build and test everything from scratch: "docker-compose up --build"
 # But this runs all tests --- including the memory-hungry db tests --- in
