@@ -17,6 +17,10 @@ racket -l tests/racket/embed-in-c
 racket -l tests/compiler/embed/test
 # fails with an error about #f being passed to `system*`
 racket -l distro-build/tests/unix-installer
+# Tests don't exist in 6.11 release yet, they're only on master
+# WARNING: pack.rktl writes to collects dirs, so it's probably best to run this
+# one last to avoid test environment issues.
+racket -l tests/racket/test-pack
 
 # GUI FAILURES
 

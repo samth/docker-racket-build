@@ -44,8 +44,3 @@ raco test -c eopl/tests
 raco test -c datalog/tests
 raco test -c racklog/tests
 raco test -c tests/html
-
-# mflatt
-# WARNING: pack.rktl writes to collects dirs, so it's probably best to run this
-# one last to avoid test environment issues. 
-racket -l tests/racket/test-pack
