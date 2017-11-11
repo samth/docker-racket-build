@@ -20,6 +20,11 @@ before_install:
   - sudo apt-get update
   - sudo apt-get -y install docker-ce
 
+install:
+  - docker-compose build ${INSTALLATION}
+  - docker-compose build ${INSTALLATION}-test
+  - docker-compose build ${INSTALLATION}-test-gui
+
 script:
   - docker-compose run ${INSTALLATION}
   - docker-compose run ${INSTALLATION}-test
