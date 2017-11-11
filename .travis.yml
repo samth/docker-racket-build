@@ -3,8 +3,10 @@ sudo: required
 env:
   - INSTALLATION=racket-x86
   - INSTALLATION=racket-x86-minimal
-  - INSTALLATION=racket-i386
-  - INSTALLATION=racket-i386-minimal
+  # Temporarily disabled due to Typed Racket GUI test failures related to
+  # extflonums and 32-bit builds, see racket/typed-racket#652
+  # - INSTALLATION=racket-i386
+  # - INSTALLATION=racket-i386-minimal
   - INSTALLATION=racket-x86-natipkg
   - INSTALLATION=racket-x86-natipkg-minimal
 
@@ -18,8 +20,12 @@ before_install:
   - sudo apt-get update
   - sudo apt-get -y install docker-ce
 
+install:
+  - docker-compose build ${INSTALLATION}
+  - docker-compose build ${INSTALLATION}-test
+  - docker-compose build ${INSTALLATION}-test-gui
+
 script:
   - docker-compose run ${INSTALLATION}
-  # Commented out for now - will enable in future PR once first part works
-  # - docker-compose run ${INSTALLATION}-test
-  # - docker-compose run ${INSTALLATION}-test-gui
+  - docker-compose run ${INSTALLATION}-test
+  - docker-compose run ${INSTALLATION}-test-gui
