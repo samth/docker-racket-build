@@ -3,8 +3,10 @@ sudo: required
 env:
   - INSTALLATION=racket-x86
   - INSTALLATION=racket-x86-minimal
-  - INSTALLATION=racket-i386
-  - INSTALLATION=racket-i386-minimal
+  # Temporarily disabled due to Typed Racket GUI test failures related to
+  # extflonums and 32-bit builds, see racket/typed-racket#652
+  # - INSTALLATION=racket-i386
+  # - INSTALLATION=racket-i386-minimal
   - INSTALLATION=racket-x86-natipkg
   - INSTALLATION=racket-x86-natipkg-minimal
 
