@@ -25,6 +25,10 @@ docker-compose run racket-x86-minimal-test
 docker-compose run racket-x86-minimal-test-gui
 ```
 
+##### View running GUI tests
+
+Connect to `localhost` in your browser, then click the "Connect" button.
+
 
 ##### Run a particular command in a generated image
 
