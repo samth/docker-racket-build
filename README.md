@@ -1,4 +1,4 @@
-## Docker-ized build and test of Racket releases
+## Docker-ized build and test of Racket releases [![Build Status](https://travis-ci.org/samth/docker-racket-build.svg?branch=full-travis)](https://travis-ci.org/samth/docker-racket-build)
 
 ##### To build a particular configuration
 
