@@ -74,12 +74,16 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.installer
-      args:
-        # TODO: Make the version more easily configurable, likely as part of
-        # the test runner container.
-        RACKET_VERSION: "6.11"
-        RACKET_INSTALLER_PLATFORM: x86_64-linux
-        RACKET_INSTALLER_DIST: racket
+      # We use a YAML anchor for the build args to set a common version,
+      # installer website, and installer path for building all installation
+      # service images. See racket-x86-minimal.build.args for an example of how
+      # the anchor is used.
+      args: &default-build-args
+        RACKET_VERSION: "${RACKET_VERSION}"
+        RACKET_INSTALLER_HOST: "${RACKET_INSTALLER_HOST}"
+        RACKET_INSTALLER_PATH_PREFIX: "${RACKET_INSTALLER_PATH_PREFIX}"
+        RACKET_INSTALLER_PLATFORM: "${RACKET_PLATFORM_LINUX_64}"
+        RACKET_INSTALLER_DIST: "${RACKET_DIST_FULL}"
     command: racket -e '(+ 1 2)'
   racket-x86-test:
     image: racket-x86-test
@@ -105,9 +109,15 @@ services:
       context: .
       dockerfile: Dockerfile.installer
       args:
-        RACKET_VERSION: "6.11"
-        RACKET_INSTALLER_PLATFORM: x86_64-linux
-        RACKET_INSTALLER_DIST: racket-minimal
+        # We import the default build args and overwrite the desired platform
+        # and distribution type. The platform defaults to x86_64 linux already
+        # but the goal of default-build-args is just to set where installers are
+        # downloaded, not specify a default platform and distribution.
+        # Unfortunately, it's hard to include some keys and not others in an
+        # anchor so we accept a little apparent redundancy.
+        <<: *default-build-args
+        RACKET_INSTALLER_PLATFORM: "${RACKET_PLATFORM_LINUX_64}"
+        RACKET_INSTALLER_DIST: "${RACKET_DIST_MINIMAL}"
     command: racket -e '(+ 1 2)'
   racket-x86-minimal-test:
     image: racket-x86-minimal-test
@@ -133,13 +143,13 @@ services:
       context: .
       dockerfile: Dockerfile.installer
       args:
+        <<: *default-build-args
         # Base images changed to i386 variants, as using the default images
         # won't compile due to architecture assumptions.
         RACKET_IMAGE_FOR_INSTALLER: i386/buildpack-deps
         RACKET_IMAGE_FOR_RUNTIME: i386/buildpack-deps
-        RACKET_VERSION: "6.11"
-        RACKET_INSTALLER_PLATFORM: i386-linux
-        RACKET_INSTALLER_DIST: racket
+        RACKET_INSTALLER_PLATFORM: "${RACKET_PLATFORM_LINUX_32}"
+        RACKET_INSTALLER_DIST: "${RACKET_DIST_FULL}"
     command: racket -e '(+ 1 2)'
   racket-i386-test:
     image: racket-i386-test
@@ -165,11 +175,11 @@ services:
       context: .
       dockerfile: Dockerfile.installer
       args:
+        <<: *default-build-args
         RACKET_IMAGE_FOR_INSTALLER: i386/buildpack-deps
         RACKET_IMAGE_FOR_RUNTIME: i386/buildpack-deps
-        RACKET_VERSION: "6.11"
-        RACKET_INSTALLER_PLATFORM: i386-linux
-        RACKET_INSTALLER_DIST: racket-minimal
+        RACKET_INSTALLER_PLATFORM: "${RACKET_PLATFORM_LINUX_32}"
+        RACKET_INSTALLER_DIST: "${RACKET_DIST_MINIMAL}"
     command: racket -e '(+ 1 2)'
   racket-i386-minimal-test:
     image: racket-i386-minimal-test
@@ -199,9 +209,9 @@ services:
       context: .
       dockerfile: Dockerfile.installer
       args:
-        RACKET_VERSION: "6.11"
-        RACKET_INSTALLER_PLATFORM: x86_64-linux-natipkg
-        RACKET_INSTALLER_DIST: racket
+        <<: *default-build-args
+        RACKET_INSTALLER_PLATFORM: "${RACKET_PLATFORM_LINUX_NATIPKG_64}"
+        RACKET_INSTALLER_DIST: "${RACKET_DIST_FULL}"
     command: racket -e '(+ 1 2)'
   racket-x86-natipkg-test:
     image: racket-x86-natipkg-test
@@ -227,9 +237,9 @@ services:
       context: .
       dockerfile: Dockerfile.installer
       args:
-        RACKET_VERSION: "6.11"
-        RACKET_INSTALLER_PLATFORM: x86_64-linux-natipkg
-        RACKET_INSTALLER_DIST: racket-minimal
+        <<: *default-build-args
+        RACKET_INSTALLER_PLATFORM: "${RACKET_PLATFORM_LINUX_NATIPKG_64}"
+        RACKET_INSTALLER_DIST: "${RACKET_DIST_MINIMAL}"
     command: racket -e '(+ 1 2)'
   racket-x86-natipkg-minimal-test:
     image: racket-x86-natipkg-minimal-test
