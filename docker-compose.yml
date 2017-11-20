@@ -92,12 +92,14 @@ services:
       dockerfile: Dockerfile.test
       args:
         RACKET_IMAGE: racket-x86
+    user: racket:racket
   racket-x86-test-gui:
     build:
       context: .
       dockerfile: Dockerfile.test-gui
       args:
         RACKET_TEST_IMAGE: racket-x86-test
+    user: racket:racket
     environment:
       DISPLAY: xvfb:0.0
     depends_on:
@@ -126,12 +128,14 @@ services:
       dockerfile: Dockerfile.test
       args:
         RACKET_IMAGE: racket-x86-minimal
+    user: racket:racket
   racket-x86-minimal-test-gui:
     build:
       context: .
       dockerfile: Dockerfile.test-gui
       args:
         RACKET_TEST_IMAGE: racket-x86-minimal-test
+    user: racket:racket
     environment:
       DISPLAY: xvfb:0.0
     depends_on:
@@ -158,12 +162,14 @@ services:
       dockerfile: Dockerfile.test
       args:
         RACKET_IMAGE: racket-i386
+    user: racket:racket
   racket-i386-test-gui:
     build:
       context: .
       dockerfile: Dockerfile.test-gui
       args:
         RACKET_TEST_IMAGE: racket-i386-test
+    user: racket:racket
     environment:
       DISPLAY: xvfb:0.0
     depends_on:
@@ -188,12 +194,14 @@ services:
       dockerfile: Dockerfile.test
       args:
         RACKET_IMAGE: racket-i386-minimal
+    user: racket:racket
   racket-i386-minimal-test-gui:
     build:
       context: .
       dockerfile: Dockerfile.test-gui
       args:
         RACKET_TEST_IMAGE: racket-i386-minimal-test
+    user: racket:racket
     environment:
       DISPLAY: xvfb:0.0
     depends_on:
@@ -220,12 +228,14 @@ services:
       dockerfile: Dockerfile.test
       args:
         RACKET_IMAGE: racket-x86-natipkg
+    user: racket:racket
   racket-x86-natipkg-test-gui:
     build:
       context: .
       dockerfile: Dockerfile.test-gui
       args:
         RACKET_TEST_IMAGE: racket-x86-natipkg-test
+    user: racket:racket
     environment:
       DISPLAY: xvfb:0.0
     depends_on:
@@ -248,12 +258,14 @@ services:
       dockerfile: Dockerfile.test
       args:
         RACKET_IMAGE: racket-x86-natipkg-minimal
+    user: racket:racket
   racket-x86-natipkg-minimal-test-gui:
     build:
       context: .
       dockerfile: Dockerfile.test-gui
       args:
         RACKET_TEST_IMAGE: racket-x86-natipkg-minimal-test
+    user: racket:racket
     environment:
       DISPLAY: xvfb:0.0
     depends_on:
