@@ -10,7 +10,12 @@ RUN raco pkg install --auto --installation --skip-installed \
     raco-find-collection \
     https://github.com/racket/pcps-test.git
 
+RUN mkdir /home/racket \
+ && groupadd -r racket \
+ && useradd --no-log-init -r -g racket racket \
+ && chown -R racket:racket /home/racket \
+ && chown -R racket:racket /usr/racket
+
 COPY ./test.sh /usr/bin/racket-tests.sh
 RUN chmod +x /usr/bin/racket-tests.sh
-RUN groupadd -r racket && useradd --no-log-init -r -g racket racket
 CMD ["/bin/sh", "-c", "/usr/bin/racket-tests.sh"]
