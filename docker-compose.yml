@@ -92,18 +92,14 @@ services:
       dockerfile: Dockerfile.test
       args:
         RACKET_IMAGE: racket-x86
-    user: racket:racket
-  racket-x86-test-gui:
-    build:
-      context: .
-      dockerfile: Dockerfile.test-gui
-      args:
-        RACKET_TEST_IMAGE: racket-x86-test
-    user: racket:racket
+    command: ["/bin/sh", "-c", "/usr/bin/racket-tests.sh"]
+  racket-x86-test-gui: &gui-test-service
+    image: racket-x86-test
     environment:
       DISPLAY: xvfb:0.0
     depends_on:
       - xvfb
+    command: ["/bin/sh", "-c", "/usr/bin/racket-gui-tests.sh"]
 
   racket-x86-minimal:
     image: racket-x86-minimal
@@ -128,18 +124,10 @@ services:
       dockerfile: Dockerfile.test
       args:
         RACKET_IMAGE: racket-x86-minimal
-    user: racket:racket
+    command: ["/bin/sh", "-c", "/usr/bin/racket-tests.sh"]
   racket-x86-minimal-test-gui:
-    build:
-      context: .
-      dockerfile: Dockerfile.test-gui
-      args:
-        RACKET_TEST_IMAGE: racket-x86-minimal-test
-    user: racket:racket
-    environment:
-      DISPLAY: xvfb:0.0
-    depends_on:
-      - xvfb
+    <<: *gui-test-service
+    image: racket-x86-minimal-test
 
   racket-i386:
     image: racket-i386
@@ -162,18 +150,10 @@ services:
       dockerfile: Dockerfile.test
       args:
         RACKET_IMAGE: racket-i386
-    user: racket:racket
+    command: ["/bin/sh", "-c", "/usr/bin/racket-tests.sh"]
   racket-i386-test-gui:
-    build:
-      context: .
-      dockerfile: Dockerfile.test-gui
-      args:
-        RACKET_TEST_IMAGE: racket-i386-test
-    user: racket:racket
-    environment:
-      DISPLAY: xvfb:0.0
-    depends_on:
-      - xvfb
+    <<: *gui-test-service
+    image: racket-i386-test
 
   racket-i386-minimal:
     image: racket-i386-minimal
@@ -194,18 +174,10 @@ services:
       dockerfile: Dockerfile.test
       args:
         RACKET_IMAGE: racket-i386-minimal
-    user: racket:racket
+    command: ["/bin/sh", "-c", "/usr/bin/racket-tests.sh"]
   racket-i386-minimal-test-gui:
-    build:
-      context: .
-      dockerfile: Dockerfile.test-gui
-      args:
-        RACKET_TEST_IMAGE: racket-i386-minimal-test
-    user: racket:racket
-    environment:
-      DISPLAY: xvfb:0.0
-    depends_on:
-      - xvfb
+    <<: *gui-test-service
+    image: racket-i386-minimal-test
 
   # TODO: Figure out why natipkg builds are failing. Seems to be related to
   # problems with the libssl and libcrypto (OpenSSL libs) libs included in the
@@ -228,18 +200,10 @@ services:
       dockerfile: Dockerfile.test
       args:
         RACKET_IMAGE: racket-x86-natipkg
-    user: racket:racket
+    command: ["/bin/sh", "-c", "/usr/bin/racket-tests.sh"]
   racket-x86-natipkg-test-gui:
-    build:
-      context: .
-      dockerfile: Dockerfile.test-gui
-      args:
-        RACKET_TEST_IMAGE: racket-x86-natipkg-test
-    user: racket:racket
-    environment:
-      DISPLAY: xvfb:0.0
-    depends_on:
-      - xvfb
+    <<: *gui-test-service
+    image: racket-x86-natipkg-test
 
   racket-x86-natipkg-minimal:
     image: racket-x86-natipkg-minimal
@@ -258,18 +222,10 @@ services:
       dockerfile: Dockerfile.test
       args:
         RACKET_IMAGE: racket-x86-natipkg-minimal
-    user: racket:racket
+    command: ["/bin/sh", "-c", "/usr/bin/racket-tests.sh"]
   racket-x86-natipkg-minimal-test-gui:
-    build:
-      context: .
-      dockerfile: Dockerfile.test-gui
-      args:
-        RACKET_TEST_IMAGE: racket-x86-natipkg-minimal-test
-    user: racket:racket
-    environment:
-      DISPLAY: xvfb:0.0
-    depends_on:
-      - xvfb
+    <<: *gui-test-service
+    image: racket-x86-natipkg-minimal-test
 
 volumes:
   nginx-html:
