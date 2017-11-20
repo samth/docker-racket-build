@@ -7,6 +7,9 @@ set -eufx
 # enables proper counting of test cases and removes the need for separate
 # commands. Also makes timeout logic and other test configuration easy to add.
 
+# mflatt
+racket -l tests/racket/test
+
 # robby
 racket -l tests/racket/contract/all
 racket -l tests/racket/contract-stress-argmin
