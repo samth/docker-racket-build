@@ -12,4 +12,5 @@ RUN raco pkg install --auto --installation --skip-installed \
 
 COPY ./test.sh /usr/bin/racket-tests.sh
 RUN chmod +x /usr/bin/racket-tests.sh
+RUN groupadd -r racket && useradd --no-log-init -r -g racket racket
 CMD ["/bin/sh", "-c", "/usr/bin/racket-tests.sh"]
