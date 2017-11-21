@@ -21,18 +21,19 @@ docker-compose build racket-x86-minimal-test
 # Run previously-built non-GUI release tests
 docker-compose run racket-x86-minimal-test
 
-# Run previously-built GUI tests
-docker-compose run racket-x86-minimal-test-gui
-
 # Start the GUI browser debugging services in the background
-# Once run, run some GUI tests and open your browser to localhost
 docker-compose up -d nginx
+
+# Build and run GUI release tests
+docker-compose build racket-x86-minimal-test-gui
+docker-compose run racket-x86-minimal-test-gui
+# Now open localhost in your browser (if debugging services are up)
 
 # Run a different command in an already built image
 docker-compose run racket-x86-minimal-test raco test -p my-collection
 ```
 
-### Detailed overview of images
+### Docker configuration overview
 
 The [Docker Compose][2] configuration in `docker-compose.yml` defines a few
 services for each installer variant:
@@ -62,12 +63,12 @@ VNC-over-Websockets connection letting you watch what the GUI tests are doing
 to the X11 server in real time by opening your browser and pressing the
 "connect" button.
 
-#### Installer variants
+### Installer variants
 
 Not all installer variants are installed and tested. The following is a
 complete list of installer names used in the `racket-{installer}` services:
 
-| Installer name  | Meaning |
+| Name  | Meaning |
 | --- | --- |
 | `i386` | Linux 32-bit installer for main-distribution Racket |
 | `i386-minimal` | Linux 32-bit installer for minimal Racket |
