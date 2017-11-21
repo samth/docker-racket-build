@@ -85,5 +85,142 @@ installation variants are yet to be tested:
 - Windows `.exe` installations, which might be possible
 - MacOS `.dmg` installations, which is likely impossible
 
+### Release tests included so far
+
+This list mirrors the "Testing" section of the [Release Checklist][3], with all
+items contained here automated and run in the Dockerized release tests:
+
+* [ ] {Matthew Flatt <mflatt@cs.utah.edu>}
+  - [ ] Racket Tests
+   ```
+   racket -l tests/racket/test
+   ```
+  - [ ] Languages Tests
+   ```
+   racket -l tests/htdp-lang/test-htdp
+   ```
+  - [ ] PCPS test suite (in "pcps-test" repo)
+   ```
+   raco test -p pcps-test
+   ```
+
+* [ ] {Robby Findler <robby@eecs.northwestern.edu>}
+  - [ ] Contracts Tests:
+   ```
+   racket -l tests/racket/contract/all
+   racket -l tests/racket/contract-stress-argmin
+   racket -l tests/racket/contract-stress-take-right
+   ```
+
+  - [ ] Teachpacks Tests: image tests
+   ```
+   racket -l 2htdp/tests/bitmap-as-image-in-universe
+   racket -l 2htdp/tests/image-equality-performance-htdp
+   racket -l 2htdp/tests/image-equality-performance
+   racket -l 2htdp/tests/image-too-large
+   racket -l 2htdp/tests/test-image
+   ```
+
+  - [ ] PLaneT Tests:
+   ```
+   # (the output of these tests is hard to read)
+   raco test -l tests/planet/run-all
+   ```
+
+* [ ] {Sam Tobin-Hochstadt <samth@ccs.neu.edu>}
+  - [ ] Match Tests:
+  ```
+  raco test -l tests/match/main
+  ```
+
+  - [ ] Typed Racket Tests:
+  ```
+  racket -l typed-racket-test -- --all
+  ```
+
+* [ ] {Ryan Culpepper <ryanc@ccs.neu.edu>}
+  - [ ] syntax-parse Tests
+    ```
+    raco test -c tests/stxparse
+    ```
+
+  - [ ] Data Tests
+    ```
+    raco test -c tests/data
+    ```
+
+  - [ ] DB Tests
+    ```
+    # basic tests with sqlite3; other tests require local software & configuration
+    racket -l tests/db/all-tests
+    ```
+
+  - [ ] SRFI Tests
+    ```
+    racket -l tests/srfi/run-tests
+    ```
+
+* [ ] {Jay McCarthy <jay.mccarthy@gmail.com>}
+  - [ ] XML Tests
+    ```
+    raco test -c tests/xml
+    ```
+
+  - [ ] HTML Tests
+    ```
+    raco test -c tests/html
+    ```
+
+  - [ ] PLAI Tests
+    ```
+    raco test -c plai
+    ```
+
+  - [ ] Racklog tests
+    ```
+    raco test -c racklog/tests
+    ```
+
+  - [ ] Datalog tests
+    ```
+    raco test -c datalog/tests
+    ```
+
+* [ ] {Stevie Strickland <sstrickl@ccs.neu.edu>}
+  - [ ] Unit Contract Tests
+    ```
+    raco test -l tests/units/test-unit-contracts
+    ```
+
+  - [ ] Contract Region Tests
+    ```
+    racket -l tests/racket/contract/define-contract
+    racket -l tests/racket/contract/with-contract
+    ```
+
+  - [ ] Class Contract Tests
+    ```
+    racket -l tests/racket/contract/class
+    ```
+
+* [ ] {Stephen Chang <stchang@ccs.neu.edu>}
+  - [ ] Lazy Racket Tests
+
+    ```
+    raco test -l lazy/tests/main
+    ```
+
+* [ ] {David Van Horn <dvanhorn@cs.umd.edu>, Sam Tobin-Hochstadt <samth@indiana.edu>}
+  - [ ] EoPL Tests
+    ```
+    raco test -c eopl/tests
+    ```
+
+
+See the [github issues][4] for more info on the status of automated release
+tests not yet included in this list.
+
 [1]: https://github.com/racket/racket/wiki/Release-overview
 [2]: https://docs.docker.com/compose/
+[3]: https://github.com/racket/racket/wiki/Release-Checklist
+[4]: https://github.com/samth/docker-racket-build/issues
