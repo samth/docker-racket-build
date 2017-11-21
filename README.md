@@ -77,5 +77,13 @@ complete list of installer names used in the `racket-{installer}` services:
 | `x86-natipkg` | Linux 64-bit installer for main-distribution Racket with bundled OS libraries |
 | `x86-natipkg-minimal` | Linux 64-bit installer for minimal Racket with bundled OS libraries |
 
+All installers are installed in-place, not Unix-style. The following
+installation variants are yet to be tested:
+
+- Unix-style installations of installers, which is easily doable,
+- All from-source installations, which are harder but not especially difficult.
+- Windows `.exe` installations, which might be possible
+- MacOS `.dmg` installations, which is likely impossible
+
 [1]: https://github.com/racket/racket/wiki/Release-overview
 [2]: https://docs.docker.com/compose/
