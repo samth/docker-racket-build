@@ -8,6 +8,9 @@ wiki page for details on that process.
 
 ### Quickstart `docker-compose` example commands
 
+By default, all commands use the latest Racket snapshot version. See the `.env`
+file and the [environments directory][5] for more information.
+
 ```shell
 # Build a Racket installation
 docker-compose build racket-x86-minimal
@@ -224,3 +227,4 @@ tests not yet included in this list.
 [2]: https://docs.docker.com/compose/
 [3]: https://github.com/racket/racket/wiki/Release-Checklist
 [4]: https://github.com/samth/docker-racket-build/issues
+[5]: https://github.com/samth/docker-racket-build/tree/master/environments
