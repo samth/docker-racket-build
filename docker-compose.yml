@@ -64,6 +64,18 @@ services:
       context: .
       dockerfile: Dockerfile.compose
 
+  installer:
+    build:
+      context: ./installer
+      dockerfile: Dockerfile.installer
+      args:
+        DOCKER_COMPOSE_IMAGE: docker-compose
+    environment:
+      RACKET_BASE_IMAGE: ${RACKET_BASE_IMAGE:-buildpack-deps:jessie}
+      INSTALLER_PATH: /usr/share/racket-download/installer
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
   test-runner:
     build:
       context: ./test-runner
