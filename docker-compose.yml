@@ -71,7 +71,6 @@ services:
       args:
         DOCKER_COMPOSE_IMAGE: docker-compose
     environment:
-      COMPOSE_PROJECT_NAME: rackettest
       RACKET_GUI_X11_HOST: xvfb
       RACKET_GUI_X11_NETWORK: "${COMPOSE_PROJECT_NAME}_default"
     volumes:
