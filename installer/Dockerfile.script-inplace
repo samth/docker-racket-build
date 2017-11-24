@@ -1,0 +1,21 @@
+ARG RACKET_BASE_IMAGE
+ARG INSTALLER_IMAGE
+
+FROM ${INSTALLER_IMAGE} AS download
+
+FROM ${RACKET_BASE_IMAGE} AS installation
+ARG INSTALLER_PATH
+
+COPY --from=download ${INSTALLER_PATH} /usr/share/racket-installer/installer.sh
+RUN sh /usr/share/racket-installer/installer.sh --in-place --create-dir --dest /usr/racket
+
+FROM ${RACKET_BASE_IMAGE}
+
+RUN mkdir /home/racket
+ENV RACKET_DIRS="/usr/racket /home/racket"
+ENV SSL_CERT_FILE="/usr/lib/ssl/cert.pem"
+ENV SSL_CERT_DIR="/usr/lib/ssl/certs"
+COPY --from=installation /usr/racket /usr/racket
+ENV PATH="/usr/racket/bin:${PATH}"
+RUN raco setup
+CMD ["racket"]
