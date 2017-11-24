@@ -1,14 +1,21 @@
 sudo: required
 
 env:
-  - INSTALLATION=racket-x86
-  - INSTALLATION=racket-x86-minimal
+  - >- INSTALLER_TYPE=linux-64-ospkg-full
+       INSTALLATION_TYPE=script-inplace
+  - >- INSTALLER_TYPE=linux-64-ospkg-minimal
+       INSTALLATION_TYPE=script-inplace
+  - >- INSTALLER_TYPE=linux-64-natipkg-full
+       INSTALLATION_TYPE=script-inplace
+  - >- INSTALLER_TYPE=linux-64-natipkg-minimal
+       INSTALLATION_TYPE=script-inplace
   # Temporarily disabled due to Typed Racket GUI test failures related to
   # extflonums and 32-bit builds, see racket/typed-racket#652
-  # - INSTALLATION=racket-i386
-  # - INSTALLATION=racket-i386-minimal
-  - INSTALLATION=racket-x86-natipkg
-  - INSTALLATION=racket-x86-natipkg-minimal
+  # - >- INSTALLER_TYPE=linux-32-ospkg-full
+  #      INSTALLATION_TYPE=script-inplace
+  #      RACKET_BASE_IMAGE=i386/buildpack-deps:jessie
+  # - >- INSTALLER_TYPE=linux-32-ospkg-minimal
+  #      INSTALLATION_TYPE=script-inplace
 
 services:
   - docker
@@ -19,11 +26,16 @@ before_install:
   - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
   - sudo apt-get update
   - sudo apt-get -y install docker-ce
+  # We build these in before_install because they're prerequisite services and
+  # tools, not the installer itself
+  - docker-compose build docker-compose
+  - docker-compose build xvfb
+  - docker-compose build installer
+  - docker-compose build test-runner
 
 install:
-  - docker-compose build docker-compose
-  - docker-compose build test-runner
-  - docker-compose build ${INSTALLATION}
+  - docker-compose build download-${INSTALLER_TYPE}
 
 script:
-  - docker-compose run test-runner ${INSTALLATION}
+  - docker-compose run installer ${INSTALLER_TYPE} ${INSTALLATION_TYPE}
+  - docker-compose run test-runner racket-${INSTALLER_TYPE}-${INSTALLATION_TYPE}
