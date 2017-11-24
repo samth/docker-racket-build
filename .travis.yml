@@ -21,11 +21,9 @@ before_install:
   - sudo apt-get -y install docker-ce
 
 install:
+  - docker-compose build docker-compose
+  - docker-compose build racket-release-tester
   - docker-compose build ${INSTALLATION}
-  - docker-compose build ${INSTALLATION}-test
-  - docker-compose build ${INSTALLATION}-test-gui
 
 script:
-  - docker-compose run ${INSTALLATION}
-  - docker-compose run ${INSTALLATION}-test
-  - docker-compose run ${INSTALLATION}-test-gui
+  - docker-compose run racket-release-tester ${INSTALLATION}
