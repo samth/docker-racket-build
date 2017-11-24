@@ -14,11 +14,9 @@ RUN raco pkg install --auto --installation --skip-installed \
     raco-find-collection \
     https://github.com/racket/pcps-test.git
 
-RUN mkdir /home/racket \
- && groupadd -r racket \
+RUN groupadd -r racket \
  && useradd --no-log-init -r -g racket racket \
- && chown -R racket:racket /home/racket \
- && chown -R racket:racket /usr/racket
+ && chown -R racket:racket ${RACKET_DIRS}
 
 COPY ./test.sh /usr/bin/racket-tests.sh
 COPY ./test-gui.sh /usr/bin/racket-gui-tests.sh
