@@ -1,17 +1,6 @@
 version: "3.2"
 
-# To build and test everything from scratch: "docker-compose up --build"
-# But this runs all tests --- including the memory-hungry db tests --- in
-# parallel, causing OOMEs and subsequent container death on typical laptops.
-
 services:
-
-  # TODO: This configuration is highly repetitive and should be made more
-  # abstract. This is likely best achieved with a "test runner container" that
-  # bind mounts the docker socket and calls the docker REST API from a script
-  # to programmatically build and test each combination of installater options.
-  # Doing this in Python would be relatively easy, since there's already an
-  # official and supported docker client python library.
 
   # TODO: From-source builds aren't included yet, but they're not difficult to
   # add. Neither are minimal-with-prebuilt-pkgs installations, unix-style
@@ -75,6 +64,22 @@ services:
       context: .
       dockerfile: Dockerfile.compose
 
+  racket-test-runner:
+    build:
+      context: ./test-runner
+      dockerfile: Dockerfile.test-runner
+      args:
+        DOCKER_COMPOSE_IMAGE: docker-compose
+    environment:
+      COMPOSE_PROJECT_NAME: rackettest
+      RACKET_GUI_X11_HOST: xvfb
+      RACKET_GUI_X11_NETWORK: "${COMPOSE_PROJECT_NAME}_default"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - xvfb
+    command: racket-x86
+
   racket-x86:
     image: racket-x86
     build:
@@ -91,21 +96,6 @@ services:
         RACKET_INSTALLER_PLATFORM: "${RACKET_PLATFORM_LINUX_64}"
         RACKET_INSTALLER_DIST: "${RACKET_DIST_FULL}"
     command: racket -e '(+ 1 2)'
-  racket-x86-test:
-    image: racket-x86-test
-    build:
-      context: .
-      dockerfile: Dockerfile.test
-      args:
-        RACKET_IMAGE: racket-x86
-    command: ["/bin/sh", "-c", "/usr/bin/racket-tests.sh"]
-  racket-x86-test-gui: &gui-test-service
-    image: racket-x86-test
-    environment:
-      DISPLAY: xvfb:0.0
-    depends_on:
-      - xvfb
-    command: ["/bin/sh", "-c", "/usr/bin/racket-gui-tests.sh"]
 
   racket-x86-minimal:
     image: racket-x86-minimal
@@ -123,17 +113,6 @@ services:
         RACKET_INSTALLER_PLATFORM: "${RACKET_PLATFORM_LINUX_64}"
         RACKET_INSTALLER_DIST: "${RACKET_DIST_MINIMAL}"
     command: racket -e '(+ 1 2)'
-  racket-x86-minimal-test:
-    image: racket-x86-minimal-test
-    build:
-      context: .
-      dockerfile: Dockerfile.test
-      args:
-        RACKET_IMAGE: racket-x86-minimal
-    command: ["/bin/sh", "-c", "/usr/bin/racket-tests.sh"]
-  racket-x86-minimal-test-gui:
-    <<: *gui-test-service
-    image: racket-x86-minimal-test
 
   racket-i386:
     image: racket-i386
@@ -149,17 +128,6 @@ services:
         RACKET_INSTALLER_PLATFORM: "${RACKET_PLATFORM_LINUX_32}"
         RACKET_INSTALLER_DIST: "${RACKET_DIST_FULL}"
     command: racket -e '(+ 1 2)'
-  racket-i386-test:
-    image: racket-i386-test
-    build:
-      context: .
-      dockerfile: Dockerfile.test
-      args:
-        RACKET_IMAGE: racket-i386
-    command: ["/bin/sh", "-c", "/usr/bin/racket-tests.sh"]
-  racket-i386-test-gui:
-    <<: *gui-test-service
-    image: racket-i386-test
 
   racket-i386-minimal:
     image: racket-i386-minimal
@@ -173,21 +141,6 @@ services:
         RACKET_INSTALLER_PLATFORM: "${RACKET_PLATFORM_LINUX_32}"
         RACKET_INSTALLER_DIST: "${RACKET_DIST_MINIMAL}"
     command: racket -e '(+ 1 2)'
-  racket-i386-minimal-test:
-    image: racket-i386-minimal-test
-    build:
-      context: .
-      dockerfile: Dockerfile.test
-      args:
-        RACKET_IMAGE: racket-i386-minimal
-    command: ["/bin/sh", "-c", "/usr/bin/racket-tests.sh"]
-  racket-i386-minimal-test-gui:
-    <<: *gui-test-service
-    image: racket-i386-minimal-test
-
-  # TODO: Figure out why natipkg builds are failing. Seems to be related to
-  # problems with the libssl and libcrypto (OpenSSL libs) libs included in the
-  # racket-x86_64-linux-natipkg-2 package.
 
   racket-x86-natipkg:
     image: racket-x86-natipkg
@@ -199,17 +152,6 @@ services:
         RACKET_INSTALLER_PLATFORM: "${RACKET_PLATFORM_LINUX_NATIPKG_64}"
         RACKET_INSTALLER_DIST: "${RACKET_DIST_FULL}"
     command: racket -e '(+ 1 2)'
-  racket-x86-natipkg-test:
-    image: racket-x86-natipkg-test
-    build:
-      context: .
-      dockerfile: Dockerfile.test
-      args:
-        RACKET_IMAGE: racket-x86-natipkg
-    command: ["/bin/sh", "-c", "/usr/bin/racket-tests.sh"]
-  racket-x86-natipkg-test-gui:
-    <<: *gui-test-service
-    image: racket-x86-natipkg-test
 
   racket-x86-natipkg-minimal:
     image: racket-x86-natipkg-minimal
@@ -221,17 +163,6 @@ services:
         RACKET_INSTALLER_PLATFORM: "${RACKET_PLATFORM_LINUX_NATIPKG_64}"
         RACKET_INSTALLER_DIST: "${RACKET_DIST_MINIMAL}"
     command: racket -e '(+ 1 2)'
-  racket-x86-natipkg-minimal-test:
-    image: racket-x86-natipkg-minimal-test
-    build:
-      context: .
-      dockerfile: Dockerfile.test
-      args:
-        RACKET_IMAGE: racket-x86-natipkg-minimal
-    command: ["/bin/sh", "-c", "/usr/bin/racket-tests.sh"]
-  racket-x86-natipkg-minimal-test-gui:
-    <<: *gui-test-service
-    image: racket-x86-natipkg-minimal-test
 
 volumes:
   nginx-html:

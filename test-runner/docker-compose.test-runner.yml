@@ -1,0 +1,32 @@
+version: "3.2"
+
+services:
+  test-base:
+    image: test-base
+    build:
+      context: /etc/racket-test-runner
+      dockerfile: Dockerfile.test
+      args:
+        RACKET_IMAGE: ${RACKET_IMAGE}
+    networks:
+      - x11
+  test-nogui:
+    image: test-base
+    command: ["/bin/sh", "-c", "/usr/bin/racket-tests.sh"]
+    networks:
+      - x11
+  test-gui:
+    image: test-base
+    command: ["/bin/sh", "-c", "/usr/bin/racket-gui-tests.sh"]
+    environment:
+      DISPLAY: ${RACKET_GUI_X11_HOST}:0.0
+    networks:
+      - x11
+
+networks:
+  default:
+    external:
+      name: ${RACKET_GUI_X11_NETWORK}
+  x11:
+    external:
+      name: ${RACKET_GUI_X11_NETWORK}

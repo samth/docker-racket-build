@@ -1,0 +1,13 @@
+ARG DOCKER_COMPOSE_IMAGE
+
+FROM ${DOCKER_COMPOSE_IMAGE}
+
+RUN mkdir /etc/racket-test-runner
+COPY ./docker-compose.test-runner.yml /etc/racket-test-runner/docker-compose.yml
+COPY ./Dockerfile.test /etc/racket-test-runner/Dockerfile.test
+COPY ./test.sh /etc/racket-test-runner/test.sh
+COPY ./test-gui.sh /etc/racket-test-runner/test-gui.sh
+
+COPY ./test-runner.sh /usr/bin/racket-test-runner
+RUN chmod +x /usr/bin/racket-test-runner
+ENTRYPOINT ["racket-test-runner"]
