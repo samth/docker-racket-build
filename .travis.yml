@@ -1,21 +1,28 @@
 sudo: required
 
 env:
-  - | INSTALLER_TYPE=linux-64-ospkg-full
-      INSTALLATION_TYPE=script-inplace
-  - | INSTALLER_TYPE=linux-64-ospkg-minimal
-      INSTALLATION_TYPE=script-inplace
-  - | INSTALLER_TYPE=linux-64-natipkg-full
-      INSTALLATION_TYPE=script-inplace
-  - | INSTALLER_TYPE=linux-64-natipkg-minimal
-      INSTALLATION_TYPE=script-inplace
+  - |
+    INSTALLER_TYPE=linux-64-ospkg-full
+    INSTALLATION_TYPE=script-inplace
+  - |
+    INSTALLER_TYPE=linux-64-ospkg-minimal
+    INSTALLATION_TYPE=script-inplace
+  - |
+    INSTALLER_TYPE=linux-64-natipkg-full
+    INSTALLATION_TYPE=script-inplace
+  - |
+    INSTALLER_TYPE=linux-64-natipkg-minimal
+    INSTALLATION_TYPE=script-inplace
   # Temporarily disabled due to Typed Racket GUI test failures related to
   # extflonums and 32-bit builds, see racket/typed-racket#652
-  # - | INSTALLER_TYPE=linux-32-ospkg-full
-  #     INSTALLATION_TYPE=script-inplace
-  #     RACKET_BASE_IMAGE=i386/buildpack-deps:jessie
-  # - | INSTALLER_TYPE=linux-32-ospkg-minimal
-  #     INSTALLATION_TYPE=script-inplace
+  # - |
+  #   INSTALLER_TYPE=linux-32-ospkg-full
+  #   INSTALLATION_TYPE=script-inplace
+  #   RACKET_BASE_IMAGE=i386/buildpack-deps:jessie
+  # - |
+  #   INSTALLER_TYPE=linux-32-ospkg-minimal
+  #   INSTALLATION_TYPE=script-inplace
+  #   RACKET_BASE_IMAGE=i386/buildpack-deps:jessie
 
 services:
   - docker
