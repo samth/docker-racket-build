@@ -64,7 +64,7 @@ services:
       context: .
       dockerfile: Dockerfile.compose
 
-  racket-test-runner:
+  test-runner:
     build:
       context: ./test-runner
       dockerfile: Dockerfile.test-runner

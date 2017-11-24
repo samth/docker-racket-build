@@ -22,8 +22,8 @@ before_install:
 
 install:
   - docker-compose build docker-compose
-  - docker-compose build racket-release-tester
+  - docker-compose build test-runner
   - docker-compose build ${INSTALLATION}
 
 script:
-  - docker-compose run racket-release-tester ${INSTALLATION}
+  - docker-compose run test-runner ${INSTALLATION}
