@@ -1,0 +1,15 @@
+FROM buildpack-deps:jessie-curl AS wget
+
+ARG RACKET_VERSION
+ARG RACKET_INSTALLER_PLATFORM
+ARG RACKET_INSTALLER_DIST
+ARG RACKET_INSTALLER_HOST
+ARG RACKET_INSTALLER_PATH_PREFIX
+
+ENV RACKET_INSTALLER_URL="https://${RACKET_INSTALLER_HOST}${RACKET_INSTALLER_PATH_PREFIX}/${RACKET_INSTALLER_DIST}-${RACKET_VERSION}-${RACKET_INSTALLER_PLATFORM}.sh"
+RUN mkdir -p /usr/share/racket-download
+RUN wget --quiet -O /usr/share/racket-download/installer ${RACKET_INSTALLER_URL}
+
+FROM scratch
+
+COPY --from=wget /usr/share/racket-download/installer /usr/share/racket-download/installer
