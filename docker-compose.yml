@@ -91,28 +91,27 @@ services:
       - xvfb
     command: racket-x86
 
-  racket-x86:
-    image: racket-x86
+  download-linux-64-ospkg-full:
+    image: download-linux-64-ospkg-full
     build:
       context: .
-      dockerfile: Dockerfile.installer
+      dockerfile: Dockerfile.download
       # We use a YAML anchor for the build args to set a common version,
       # installer website, and installer path for building all installation
-      # service images. See racket-x86-minimal.build.args for an example of how
-      # the anchor is used.
+      # service images. See download-linux-64-ospkg-minimal.build.args for an
+      # example of how the anchor is used.
       args: &default-build-args
         RACKET_VERSION: "${RACKET_VERSION}"
         RACKET_INSTALLER_HOST: "${RACKET_INSTALLER_HOST}"
         RACKET_INSTALLER_PATH_PREFIX: "${RACKET_INSTALLER_PATH_PREFIX}"
         RACKET_INSTALLER_PLATFORM: "${RACKET_PLATFORM_LINUX_64}"
         RACKET_INSTALLER_DIST: "${RACKET_DIST_FULL}"
-    command: racket -e '(+ 1 2)'
 
-  racket-x86-minimal:
-    image: racket-x86-minimal
+  download-linux-64-ospkg-minimal:
+    image: download-linux-64-ospkg-minimal
     build:
       context: .
-      dockerfile: Dockerfile.installer
+      dockerfile: Dockerfile.download
       args:
         # We import the default build args and overwrite the desired platform
         # and distribution type. The platform defaults to x86_64 linux already
@@ -123,57 +122,46 @@ services:
         <<: *default-build-args
         RACKET_INSTALLER_PLATFORM: "${RACKET_PLATFORM_LINUX_64}"
         RACKET_INSTALLER_DIST: "${RACKET_DIST_MINIMAL}"
-    command: racket -e '(+ 1 2)'
 
-  racket-i386:
-    image: racket-i386
+  download-linux-32-ospkg-full:
+    image: download-linux-32-ospkg-full
     build:
       context: .
-      dockerfile: Dockerfile.installer
+      dockerfile: Dockerfile.download
       args:
         <<: *default-build-args
-        # Base images changed to i386 variants, as using the default images
-        # won't compile due to architecture assumptions.
-        RACKET_IMAGE_FOR_INSTALLER: i386/buildpack-deps
-        RACKET_IMAGE_FOR_RUNTIME: i386/buildpack-deps
         RACKET_INSTALLER_PLATFORM: "${RACKET_PLATFORM_LINUX_32}"
         RACKET_INSTALLER_DIST: "${RACKET_DIST_FULL}"
-    command: racket -e '(+ 1 2)'
 
-  racket-i386-minimal:
-    image: racket-i386-minimal
+  download-linux-32-ospkg-minimal:
+    image: download-linux-32-ospkg-minimal
     build:
       context: .
-      dockerfile: Dockerfile.installer
+      dockerfile: Dockerfile.download
       args:
         <<: *default-build-args
-        RACKET_IMAGE_FOR_INSTALLER: i386/buildpack-deps
-        RACKET_IMAGE_FOR_RUNTIME: i386/buildpack-deps
         RACKET_INSTALLER_PLATFORM: "${RACKET_PLATFORM_LINUX_32}"
         RACKET_INSTALLER_DIST: "${RACKET_DIST_MINIMAL}"
-    command: racket -e '(+ 1 2)'
 
-  racket-x86-natipkg:
-    image: racket-x86-natipkg
+  download-linux-64-natipkg-full:
+    image: download-linux-64-natipkg-full
     build:
       context: .
-      dockerfile: Dockerfile.installer
+      dockerfile: Dockerfile.download
       args:
         <<: *default-build-args
         RACKET_INSTALLER_PLATFORM: "${RACKET_PLATFORM_LINUX_NATIPKG_64}"
         RACKET_INSTALLER_DIST: "${RACKET_DIST_FULL}"
-    command: racket -e '(+ 1 2)'
 
-  racket-x86-natipkg-minimal:
-    image: racket-x86-natipkg-minimal
+  download-linux-64-natipkg-minimal:
+    image: download-linux-64-natipkg-minimal
     build:
       context: .
-      dockerfile: Dockerfile.installer
+      dockerfile: Dockerfile.download
       args:
         <<: *default-build-args
         RACKET_INSTALLER_PLATFORM: "${RACKET_PLATFORM_LINUX_NATIPKG_64}"
         RACKET_INSTALLER_DIST: "${RACKET_DIST_MINIMAL}"
-    command: racket -e '(+ 1 2)'
 
 volumes:
   nginx-html:
