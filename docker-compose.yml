@@ -69,6 +69,12 @@ services:
       - novnc
       - websockify
 
+  docker-compose:
+    image: docker-compose
+    build:
+      context: .
+      dockerfile: Dockerfile.compose
+
   racket-x86:
     image: racket-x86
     build:
