@@ -19,9 +19,9 @@ services:
     image: test-base
     command: ["/bin/sh", "-c", "/usr/bin/racket-gui-tests.sh"]
     environment:
-      DISPLAY: ${RACKET_GUI_X11_HOST}:0.0
     networks:
       - x11
+      DISPLAY: ${RACKET_TESTS_X11_DISPLAY}
 
 networks:
   default:
@@ -29,4 +29,4 @@ networks:
       name: ${RACKET_GUI_X11_NETWORK}
   x11:
     external:
-      name: ${RACKET_GUI_X11_NETWORK}
+      name: ${RACKET_TESTS_X11_NETWORK}

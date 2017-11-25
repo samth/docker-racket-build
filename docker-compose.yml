@@ -83,8 +83,8 @@ services:
       args:
         DOCKER_COMPOSE_IMAGE: docker-compose
     environment:
-      RACKET_GUI_X11_HOST: xvfb
-      RACKET_GUI_X11_NETWORK: "${COMPOSE_PROJECT_NAME}_default"
+      RACKET_TESTS_X11_DISPLAY: xvfb:0.0
+      RACKET_TESTS_X11_NETWORK: "${COMPOSE_PROJECT_NAME}_default"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
