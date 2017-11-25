@@ -55,7 +55,7 @@ before_install:
 
 install:
   - docker-compose build download-${INSTALLER_TYPE}
+  - docker-compose run installer ${INSTALLER_TYPE} ${INSTALLATION_TYPE}
 
 script:
-  - docker-compose run installer ${INSTALLER_TYPE} ${INSTALLATION_TYPE}
   - docker-compose run test-runner racket-${INSTALLER_TYPE}-${INSTALLATION_TYPE} ${TEST_SUITE}
