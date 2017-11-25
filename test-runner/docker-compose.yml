@@ -1,19 +1,13 @@
 version: "3.2"
 
 services:
-  test-base:
-    image: test-base
+  racket-tests:
+    image: ${RACKET_IMAGE}-tests
     build:
       context: /etc/racket-test-runner
       dockerfile: Dockerfile.test
       args:
         RACKET_IMAGE: ${RACKET_IMAGE}
-  test-nogui:
-    image: test-base
-    command: ["/bin/sh", "-c", "/usr/bin/racket-tests.sh"]
-  test-gui:
-    image: test-base
-    command: ["/bin/sh", "-c", "/usr/bin/racket-gui-tests.sh"]
     environment:
       DISPLAY: ${RACKET_TESTS_X11_DISPLAY}
 

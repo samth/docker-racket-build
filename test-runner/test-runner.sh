@@ -2,8 +2,10 @@
 set -eufx
 
 RACKET_IMAGE=$1
+RACKET_TEST_SUITE=$2
 export RACKET_IMAGE
 
-docker-compose -f /etc/racket-test-runner/docker-compose.yml -p ${RACKET_IMAGE} build --force-rm test-base
-docker-compose -f /etc/racket-test-runner/docker-compose.yml -p ${RACKET_IMAGE} run --rm test-nogui
-docker-compose -f /etc/racket-test-runner/docker-compose.yml -p ${RACKET_IMAGE} run --rm test-gui
+alias test-runner-compose="docker-compose -f /etc/racket-test-runner/docker-compose.yml -p ${RACKET_IMAGE}"
+
+test-runner-compose build --force-rm racket-tests
+test-runner-compose run --rm racket-tests suite-${RACKET_TEST_SUITE}
