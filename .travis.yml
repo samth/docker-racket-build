@@ -1,5 +1,12 @@
 sudo: required
 
+# Test pushes to master and pull requests to master, but don't test other
+# branches. Without this, pushing to a same-repository PR causes Travis to run
+# everything twice.
+branches:
+  only:
+    - "master"
+
 env:
   - |
     INSTALLER_TYPE=linux-64-ospkg-full
