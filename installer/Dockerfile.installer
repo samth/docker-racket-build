@@ -5,6 +5,7 @@ FROM ${DOCKER_COMPOSE_IMAGE}
 RUN mkdir /etc/racket-installer
 COPY ./docker-compose.yml /etc/racket-installer/docker-compose.yml
 COPY ./Dockerfile.script-inplace /etc/racket-installer/Dockerfile.script-inplace
+COPY ./Dockerfile.script-unixstyle /etc/racket-installer/Dockerfile.script-unixstyle
 
 COPY ./installer.sh /usr/bin/racket-installer
 RUN chmod +x /usr/bin/racket-installer
