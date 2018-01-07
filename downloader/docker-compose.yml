@@ -1,0 +1,14 @@
+version: "3.2"
+
+services:
+  download:
+    image: download-${DOWNLOAD_PLATFORM}-${DOWNLOAD_DIST}
+    build:
+      context: /etc/racket-downloader
+      dockerfile: Dockerfile.download
+      args:
+        INSTALLER_PLATFORM: ${DOWNLOAD_PLATFORM}
+        INSTALLER_DIST: ${DOWNLOAD_DIST}
+        INSTALLER_FILE_EXTENSION: ${DOWNLOAD_FILE_EXTENSION}
+        INSTALLER_SOURCE: ${DOWNLOAD_SOURCE}
+        RACKET_VERSION: ${RACKET_VERSION}

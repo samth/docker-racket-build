@@ -64,6 +64,17 @@ services:
       context: .
       dockerfile: Dockerfile.compose
 
+  downloader:
+    build:
+      context: ./downloader
+      dockerfile: Dockerfile.downloader
+      args:
+        DOCKER_COMPOSE_IMAGE: docker-compose
+    environment:
+      RACKET_VERSION: "6.11"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
   installer:
     build:
       context: ./installer
@@ -90,77 +101,77 @@ services:
     depends_on:
       - xvfb
 
-  download-linux-64-ospkg-full:
-    image: download-linux-64-ospkg-full
-    build:
-      context: .
-      dockerfile: Dockerfile.download
-      # We use a YAML anchor for the build args to set a common version,
-      # installer website, and installer path for building all installation
-      # service images. See download-linux-64-ospkg-minimal.build.args for an
-      # example of how the anchor is used.
-      args: &default-build-args
-        RACKET_VERSION: "${RACKET_VERSION}"
-        RACKET_INSTALLER_HOST: "${RACKET_INSTALLER_HOST}"
-        RACKET_INSTALLER_PATH_PREFIX: "${RACKET_INSTALLER_PATH_PREFIX}"
-        RACKET_INSTALLER_PLATFORM: "${RACKET_PLATFORM_LINUX_64}"
-        RACKET_INSTALLER_DIST: "${RACKET_DIST_FULL}"
-
-  download-linux-64-ospkg-minimal:
-    image: download-linux-64-ospkg-minimal
-    build:
-      context: .
-      dockerfile: Dockerfile.download
-      args:
-        # We import the default build args and overwrite the desired platform
-        # and distribution type. The platform defaults to x86_64 linux already
-        # but the goal of default-build-args is just to set where installers are
-        # downloaded, not specify a default platform and distribution.
-        # Unfortunately, it's hard to include some keys and not others in an
-        # anchor so we accept a little apparent redundancy.
-        <<: *default-build-args
-        RACKET_INSTALLER_PLATFORM: "${RACKET_PLATFORM_LINUX_64}"
-        RACKET_INSTALLER_DIST: "${RACKET_DIST_MINIMAL}"
-
-  download-linux-32-ospkg-full:
-    image: download-linux-32-ospkg-full
-    build:
-      context: .
-      dockerfile: Dockerfile.download
-      args:
-        <<: *default-build-args
-        RACKET_INSTALLER_PLATFORM: "${RACKET_PLATFORM_LINUX_32}"
-        RACKET_INSTALLER_DIST: "${RACKET_DIST_FULL}"
-
-  download-linux-32-ospkg-minimal:
-    image: download-linux-32-ospkg-minimal
-    build:
-      context: .
-      dockerfile: Dockerfile.download
-      args:
-        <<: *default-build-args
-        RACKET_INSTALLER_PLATFORM: "${RACKET_PLATFORM_LINUX_32}"
-        RACKET_INSTALLER_DIST: "${RACKET_DIST_MINIMAL}"
-
-  download-linux-64-natipkg-full:
-    image: download-linux-64-natipkg-full
-    build:
-      context: .
-      dockerfile: Dockerfile.download
-      args:
-        <<: *default-build-args
-        RACKET_INSTALLER_PLATFORM: "${RACKET_PLATFORM_LINUX_NATIPKG_64}"
-        RACKET_INSTALLER_DIST: "${RACKET_DIST_FULL}"
-
-  download-linux-64-natipkg-minimal:
-    image: download-linux-64-natipkg-minimal
-    build:
-      context: .
-      dockerfile: Dockerfile.download
-      args:
-        <<: *default-build-args
-        RACKET_INSTALLER_PLATFORM: "${RACKET_PLATFORM_LINUX_NATIPKG_64}"
-        RACKET_INSTALLER_DIST: "${RACKET_DIST_MINIMAL}"
+  # download-linux-64-ospkg-full:
+  #   image: download-linux-64-ospkg-full
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.download
+  #     # We use a YAML anchor for the build args to set a common version,
+  #     # installer website, and installer path for building all installation
+  #     # service images. See download-linux-64-ospkg-minimal.build.args for an
+  #     # example of how the anchor is used.
+  #     args: &default-build-args
+  #       RACKET_VERSION: "${RACKET_VERSION}"
+  #       RACKET_INSTALLER_HOST: "${RACKET_INSTALLER_HOST}"
+  #       RACKET_INSTALLER_PATH_PREFIX: "${RACKET_INSTALLER_PATH_PREFIX}"
+  #       RACKET_INSTALLER_PLATFORM: "${RACKET_PLATFORM_LINUX_64}"
+  #       RACKET_INSTALLER_DIST: "${RACKET_DIST_FULL}"
+  #
+  # download-linux-64-ospkg-minimal:
+  #   image: download-linux-64-ospkg-minimal
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.download
+  #     args:
+  #       # We import the default build args and overwrite the desired platform
+  #       # and distribution type. The platform defaults to x86_64 linux already
+  #       # but the goal of default-build-args is just to set where installers are
+  #       # downloaded, not specify a default platform and distribution.
+  #       # Unfortunately, it's hard to include some keys and not others in an
+  #       # anchor so we accept a little apparent redundancy.
+  #       <<: *default-build-args
+  #       RACKET_INSTALLER_PLATFORM: "${RACKET_PLATFORM_LINUX_64}"
+  #       RACKET_INSTALLER_DIST: "${RACKET_DIST_MINIMAL}"
+  #
+  # download-linux-32-ospkg-full:
+  #   image: download-linux-32-ospkg-full
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.download
+  #     args:
+  #       <<: *default-build-args
+  #       RACKET_INSTALLER_PLATFORM: "${RACKET_PLATFORM_LINUX_32}"
+  #       RACKET_INSTALLER_DIST: "${RACKET_DIST_FULL}"
+  #
+  # download-linux-32-ospkg-minimal:
+  #   image: download-linux-32-ospkg-minimal
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.download
+  #     args:
+  #       <<: *default-build-args
+  #       RACKET_INSTALLER_PLATFORM: "${RACKET_PLATFORM_LINUX_32}"
+  #       RACKET_INSTALLER_DIST: "${RACKET_DIST_MINIMAL}"
+  #
+  # download-linux-64-natipkg-full:
+  #   image: download-linux-64-natipkg-full
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.download
+  #     args:
+  #       <<: *default-build-args
+  #       RACKET_INSTALLER_PLATFORM: "${RACKET_PLATFORM_LINUX_NATIPKG_64}"
+  #       RACKET_INSTALLER_DIST: "${RACKET_DIST_FULL}"
+  #
+  # download-linux-64-natipkg-minimal:
+  #   image: download-linux-64-natipkg-minimal
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.download
+  #     args:
+  #       <<: *default-build-args
+  #       RACKET_INSTALLER_PLATFORM: "${RACKET_PLATFORM_LINUX_NATIPKG_64}"
+  #       RACKET_INSTALLER_DIST: "${RACKET_DIST_MINIMAL}"
 
 volumes:
   nginx-html:

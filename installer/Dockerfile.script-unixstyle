@@ -10,9 +10,10 @@ COPY --from=download ${INSTALLER_PATH} /tmp/racket-installer/installer.sh
 RUN sh /tmp/racket-installer/installer.sh --unix-style --create-dir --dest /usr
 
 FROM ${RACKET_BASE_IMAGE}
+ARG RACKET_UNIXSTYLE_DIR
 
 RUN mkdir /home/racket
-ENV RACKET_DIRS="/home/racket /usr/share/racket-6.11.0.2 /usr/lib/racket-6.11.0.2 /usr/include/racket-6.11.0.2 /usr/etc/racket-6.11.0.2"
+ENV RACKET_DIRS="/home/racket /usr/share/${RACKET_UNIXSTYLE_DIR} /usr/lib/${RACKET_UNIXSTYLE_DIR} /usr/include/${RACKET_UNIXSTYLE_DIR} /usr/etc/${RACKET_UNIXSTYLE_DIR}"
 ENV SSL_CERT_FILE="/usr/lib/ssl/cert.pem"
 ENV SSL_CERT_DIR="/usr/lib/ssl/certs"
 COPY --from=installer /usr /usr

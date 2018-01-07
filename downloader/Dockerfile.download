@@ -1,0 +1,18 @@
+FROM buildpack-deps:jessie-curl AS wget
+
+ARG INSTALLER_SOURCE
+ARG INSTALLER_PLATFORM
+ARG INSTALLER_DIST
+ARG INSTALLER_FILE_EXTENSION
+ARG RACKET_VERSION
+
+RUN mkdir -p /usr/share/racket-download
+COPY ./wget-release.sh /usr/bin/wget-release
+COPY ./wget-snapshot.sh /usr/bin/wget-snapshot
+RUN chmod +x /usr/bin/wget-release
+RUN chmod +x /usr/bin/wget-snapshot
+RUN wget-${INSTALLER_SOURCE} /usr/share/racket-download/installer
+
+FROM scratch
+
+COPY --from=wget /usr/share/racket-download/installer /usr/share/racket-download/installer

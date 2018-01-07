@@ -1,0 +1,13 @@
+ARG DOCKER_COMPOSE_IMAGE
+
+FROM ${DOCKER_COMPOSE_IMAGE}
+
+RUN mkdir /etc/racket-downloader
+COPY ./docker-compose.yml /etc/racket-downloader/docker-compose.yml
+COPY ./Dockerfile.download /etc/racket-downloader/Dockerfile.download
+COPY ./wget-release.sh /etc/racket-downloader/wget-release.sh
+COPY ./wget-snapshot.sh /etc/racket-downloader/wget-snapshot.sh
+
+COPY ./downloader.sh /usr/bin/racket-downloader
+RUN chmod +x /usr/bin/racket-downloader
+ENTRYPOINT ["racket-downloader"]

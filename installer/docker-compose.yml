@@ -3,7 +3,7 @@ version: "3.2"
 services:
   script-inplace:
     image: racket-${INSTALLER_TYPE}-script-inplace
-    build: &default-build
+    build:
       context: /etc/racket-installer
       dockerfile: Dockerfile.script-inplace
       args:
@@ -13,5 +13,10 @@ services:
   script-unixstyle:
     image: racket-${INSTALLER_TYPE}-script-unixstyle
     build:
-      <<: *default-build
+      context: /etc/racket-installer
       dockerfile: Dockerfile.script-unixstyle
+      args:
+        RACKET_BASE_IMAGE: ${RACKET_BASE_IMAGE}
+        RACKET_UNIXSTYLE_DIR: ${RACKET_UNIXSTYLE_DIR}
+        INSTALLER_IMAGE: download-${INSTALLER_TYPE}
+        INSTALLER_PATH: ${INSTALLER_PATH}
