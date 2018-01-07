@@ -1,0 +1,17 @@
+version: "3.2"
+
+services:
+  racket-tests:
+    image: ${RACKET_IMAGE}-tests
+    build:
+      context: /etc/racket-test-runner
+      dockerfile: Dockerfile.test
+      args:
+        RACKET_IMAGE: ${RACKET_IMAGE}
+    environment:
+      DISPLAY: ${RACKET_TESTS_X11_DISPLAY}
+
+networks:
+  default:
+    external:
+      name: ${RACKET_TESTS_X11_NETWORK}

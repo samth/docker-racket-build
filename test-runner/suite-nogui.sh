@@ -1,7 +1,9 @@
+#!/bin/sh
+set -eufx
+
 # See "Writing Safe Shell Scripts" at https://sipb.mit.edu/doc/safe-shell/
 # Note that this script is run with "sh", not bash, so pipefail isn't a thing
 # We also set -x in order to see each test command in `docker-compose logs`.
-set -eufx
 
 # TODO: Ideally, these test suites should all be run with `raco test`. This
 # enables proper counting of test cases and removes the need for separate

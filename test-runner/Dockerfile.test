@@ -14,17 +14,15 @@ RUN raco pkg install --auto --installation --skip-installed \
     raco-find-collection \
     https://github.com/racket/pcps-test.git
 
-RUN mkdir /home/racket \
- && groupadd -r racket \
+RUN groupadd -r racket \
  && useradd --no-log-init -r -g racket racket \
- && chown -R racket:racket /home/racket \
- && chown -R racket:racket /usr/racket
+ && chown -R racket:racket ${RACKET_DIRS}
 
-COPY ./test.sh /usr/bin/racket-tests.sh
-COPY ./test-gui.sh /usr/bin/racket-gui-tests.sh
-RUN chmod +x /usr/bin/racket-tests.sh
-RUN chmod +x /usr/bin/racket-gui-tests.sh
+COPY ./suite-failing.sh /usr/bin/suite-failing
+COPY ./suite-gui.sh /usr/bin/suite-gui
+COPY ./suite-nogui.sh /usr/bin/suite-nogui
+RUN chmod +x /usr/bin/suite-failing
+RUN chmod +x /usr/bin/suite-gui
+RUN chmod +x /usr/bin/suite-nogui
 
 USER racket:racket
-
-CMD ["/bin/sh", "-c", "/usr/bin/racket-tests.sh"]

@@ -1,3 +1,6 @@
+#!/bin/sh
+set -eufx
+
 # This script contains test commands that are currently known to fail due to
 # configuration issues or known bugs. They should be moved into the appropriate
 # `test.sh` or `test-gui.sh` script once fixed.
